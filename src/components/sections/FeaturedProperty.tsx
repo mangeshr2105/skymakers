@@ -11,7 +11,7 @@ const binghattiPinnacle = {
   description: "Binghatti Pinnacle at Al Jaddaf offers panoramic Dubai skyline and unobstructed Burj Khalifa views, with interiors and amenities designed for luxury-centric living.",
   configuration: "1, 2 and 3 BHK Apartments",
   price: "Starting from AED 1,350,000",
-  image: "/images/Properties/binghatti-pinnacle.webp",
+  image: "/images/properties/binghatti-pinnacle.webp",
   location: "Al Jaddaf, Dubai"
 };
 
