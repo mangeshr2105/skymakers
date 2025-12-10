@@ -1,103 +1,89 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect, Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import Reveal from '@/components/ui/Reveal';
+
+// Dynamically import heavy components
+const Hero = dynamic(() => import('@/components/sections/Hero'), { 
+  loading: () => <div className="h-screen bg-gray-100" /> 
+});
+const About = dynamic(() => import('@/components/sections/About'));
+const Services = dynamic(() => import('@/components/sections/Services'));
+const DeveloperLogos = dynamic(() => import('@/components/sections/DeveloperLogos'));
+const InstagramReels = dynamic(() => import('@/components/sections/InstagramReels'));
+import FeaturedProperty from '@/components/sections/FeaturedProperty';
+const NewsletterCard = dynamic(() => import('@/components/ui/NewsletterCard'));
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // Add smooth scrolling for anchor links
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Smooth scroll for anchor links
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e: MouseEvent) => {
+          e.preventDefault();
+          const targetId = anchor.getAttribute('href');
+          if (!targetId || targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.getBoundingClientRect().top + window.pageYOffset - 80, // Account for header height
+              behavior: 'smooth' as ScrollBehavior
+            });
+          }
+        });
+      });
+    }
+  }, []);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <div className="relative flex-grow">
+        <div className="fixed top-0 left-0 w-full h-screen z-0">
+          <Suspense fallback={
+            <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+              <div className="animate-pulse">Loading...</div>
+            </div>
+          }>
+            <Hero />
+          </Suspense>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="relative z-10 bg-white min-h-screen" style={{ marginTop: '100vh' }}>
+          <main className="flex-grow">
+            <Suspense fallback={<div className="h-96" />}>
+              <Reveal variant="fade-up">
+                <About />
+              </Reveal>
+              <Services />
+              <Reveal variant="fade-up">
+                <DeveloperLogos />
+              </Reveal>
+              <Reveal variant="fade-up">
+                <InstagramReels />
+              </Reveal>
+              
+              {/* Newsletter Section */}
+              <Reveal as="section" className="py-20 bg-gradient-to-b from-white to-gray-50" variant="fade-up">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Stay Updated</h2>
+                    <p className="mt-4 text-xl text-gray-600">Subscribe to our newsletter for the latest updates and insights</p>
+                  </div>
+                  <NewsletterCard className="mt-8" />
+                </div>
+              </Reveal>
+              
+              <FeaturedProperty />
+            </Suspense>
+          </main>
+          <Footer />
+        </div>
+      </div>
     </div>
   );
 }
